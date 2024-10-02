@@ -84,7 +84,6 @@ mr_trash_wheel =
   readxl :: read_excel("./data/202409 Trash Wheel Collection Data.xlsx", 
                        sheet = 1, range = "A2:N586") %>% 
   janitor::clean_names() %>% 
-  drop_na() %>% 
   mutate(sports_balls = as.integer(sports_balls)) %>% 
   mutate(trash_wheel = "Mr. Trash Wheel") %>% 
   relocate(trash_wheel)
@@ -97,7 +96,6 @@ prof_trash_wheel =
   readxl :: read_excel("./data/202409 Trash Wheel Collection Data.xlsx", 
                        sheet = 2, range = "A2:M108") %>% 
   janitor::clean_names() %>% 
-  drop_na() %>% 
   mutate(trash_wheel = "Prof. Trash Wheel") %>% 
   mutate(year =as.character(year)) %>% 
   relocate(trash_wheel)
@@ -106,23 +104,48 @@ gwynnda_wheel =
   readxl :: read_excel("./data/202409 Trash Wheel Collection Data.xlsx", 
                        sheet = 4, range = "A2:L158") %>% 
   janitor::clean_names() %>% 
-  drop_na() %>% 
   mutate(trash_wheel = "Gwynnda Trash Wheel") %>% 
   mutate(year =as.character(year)) %>% 
   relocate(trash_wheel)
 ```
 
+I'm using the below code to check the number of rows/observations in each datset.
+This will help me confirm if I have merged the data sets correctly in the 
+following step.
+
 ```{r}
-mr_trash_wheel
-prof_trash_wheel
-gwynnda_wheel
+nrow(mr_trash_wheel)
+nrow(prof_trash_wheel)
+nrow(gwynnda_wheel)
 ```
 
-
-
-Next, we will merge the three datasets into one by the trash_wheel variable.
+Next, we will merge the three datasets into one by binding the rows.
 
 ```{r}
 trash_wheel_df = bind_rows(mr_trash_wheel, prof_trash_wheel,gwynnda_wheel)
 ```
+
+#### Summary of combined data
+
+The code below is used to determine some statistics used in the summary.
+
+```{r}
+gwynnda_june =
+  gwynnda_wheel %>% 
+  filter(
+    month == "June",
+    year == "2022"
+  )
+
+sum(select(gwynnda_june, cigarette_butts))
+```
+
+Our combined dataset has a total of `r nrow(trash_wheel_df)` rows and `r ncol(trash_wheel_df)` columns. Key variables include trash wheel name (trash_wheel), dumpster number (dumpster), weight in tons (weight_tons), and volume in cubic yards (volume_cubic_yards). Columns are also included for each type of garbage. 
+
+The total weight of trash collected by Professor Trash Wheel for the available 
+data was `r sum(select(prof_trash_wheel, weight_tons))` tons. 
+
+The total number of cigarette butts collected by Gwynnda in June of 2022 was 18,120.
+
+
 
