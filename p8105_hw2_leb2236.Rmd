@@ -5,3 +5,70 @@ date: 2024-10-02
 output: github_document
 ---
 
+```{r setup, include = FALSE}
+library(tidyverse)
+```
+
+## Problem 1
+
+First I am going to import and then read/clean the NYC Transit data.
+
+```{r}
+transit_data = 
+  read_csv("./data/NYC_Transit_Subway_Entrance_And_Exit_Data.csv", 
+           col_types = cols(Route8 = "c", Route9 = "c", Route10 = "c", Route11 = "c")) %>% 
+  janitor :: clean_names() %>% 
+  select(
+    line, station_name, station_latitude, station_longitude, 
+    starts_with("route"), entry, exit_only, vending, entrance_type, 
+    ada) %>% 
+  mutate(entry = ifelse(entry == "YES", TRUE, FALSE))
+transit_data
+```
+
+The next bit of code selects the station name and line, and uses distinct() command to 
+obtain all unique combinations.
+```{r}
+transit_data |> 
+  select(station_name, line) |> 
+  distinct()
+```
+
+The next bit of code is similar but filters according to ADA compliance.
+```{r}
+transit_data |> 
+  filter(ada == TRUE) |> 
+  select(station_name, line) |> 
+  distinct()
+```
+
+
+The next bit of code is used to determine the proportion of stations without 
+vending that allow entrance.
+```{r}
+transit_data |> 
+  filter(vending == "NO") |> 
+  pull(entry) |> 
+  mean()
+```
+
+Lastly, we write a code chunk to identify stations that serve the A train, and to assess how many of these are ADA compliant. We convert the data from wide to long format. Then we filter on A train and on ADA compliance, and use select() and distinct() to obstain dataframes with the required stations in rows.
+```{r}
+transit_data |> 
+  pivot_longer(
+    route1:route11,
+    names_to = "route_num",
+    values_to = "route") |> 
+  filter(route == "A") |> 
+  select(station_name, line) |> 
+  distinct()
+
+transit_data |> 
+  pivot_longer(
+    route1:route11,
+    names_to = "route_num",
+    values_to = "route") |> 
+  filter(route == "A", ada == TRUE) |> 
+  select(station_name, line) |> 
+  distinct()
+```
