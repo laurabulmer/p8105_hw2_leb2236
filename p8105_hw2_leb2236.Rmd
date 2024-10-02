@@ -73,20 +73,56 @@ transit_data |>
   distinct()
 ```
 
-
-## Problem 2
+## Problem #2
 
 First, we are going to import the Mr. Trash Wheel dataset. Then we read and 
 clean it. 
+
 
 ```{r}
 mr_trash_wheel = 
   readxl :: read_excel("./data/202409 Trash Wheel Collection Data.xlsx", 
                        sheet = 1, range = "A2:N586") %>% 
-  janitor :: clean_names() %>% 
+  janitor::clean_names() %>% 
   drop_na() %>% 
   mutate(sports_balls = as.integer(sports_balls)) %>% 
   mutate(trash_wheel = "Mr. Trash Wheel") %>% 
   relocate(trash_wheel)
+```
+
+Then we will do the same thing for the Professor Trash Wheel and Gwynnda datasets.
+
+```{r}
+prof_trash_wheel = 
+  readxl :: read_excel("./data/202409 Trash Wheel Collection Data.xlsx", 
+                       sheet = 2, range = "A2:M108") %>% 
+  janitor::clean_names() %>% 
+  drop_na() %>% 
+  mutate(trash_wheel = "Prof. Trash Wheel") %>% 
+  mutate(year =as.character(year)) %>% 
+  relocate(trash_wheel)
+
+gwynnda_wheel = 
+  readxl :: read_excel("./data/202409 Trash Wheel Collection Data.xlsx", 
+                       sheet = 4, range = "A2:L158") %>% 
+  janitor::clean_names() %>% 
+  drop_na() %>% 
+  mutate(trash_wheel = "Gwynnda Trash Wheel") %>% 
+  mutate(year =as.character(year)) %>% 
+  relocate(trash_wheel)
+```
+
+```{r}
+mr_trash_wheel
+prof_trash_wheel
+gwynnda_wheel
+```
+
+
+
+Next, we will merge the three datasets into one by the trash_wheel variable.
+
+```{r}
+trash_wheel_df = bind_rows(mr_trash_wheel, prof_trash_wheel,gwynnda_wheel)
 ```
 
