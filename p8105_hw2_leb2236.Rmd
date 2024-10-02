@@ -1,0 +1,7 @@
+---
+title: "P8105 HW2"
+author: "Laura Bulmer"
+date: 2024-10-02
+output: github_document
+---
+
