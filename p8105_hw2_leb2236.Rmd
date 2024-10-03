@@ -125,8 +125,6 @@ Next, we will merge the three datasets into one by binding the rows.
 trash_wheel_df = bind_rows(mr_trash_wheel, prof_trash_wheel,gwynnda_wheel)
 ```
 
-#### Summary of combined data
-
 The code below is used to determine some statistics used in the summary.
 
 ```{r}
@@ -220,7 +218,8 @@ winners_sbs =
     gbbs %>% 
     filter(series >=5, result %in% c("STAR BAKER", "WINNER")) %>% 
     select(series, episode, baker, result)
-winners_sbs
+
+knitr::kable(winners_sbs)
 ```
 
 The outcomes in the table largely made sense, however there were a few surprises.
