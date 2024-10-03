@@ -213,6 +213,18 @@ columns in a more logical order. I arranged the data to appear in order of serie
 then episode, the technical, which I interpreted to mean the ranked results of the
 technical portion of the show.
 
+Now I'm creating a table showing the winners of seasons 5-10.
+
+```{r}
+winners_sbs = 
+    gbbs %>% 
+    filter(series >=5, result %in% c("STAR BAKER", "WINNER")) %>% 
+    select(series, episode, baker, result)
+winners_sbs
+```
+
+The outcomes in the table largely made sense, however there were a few surprises.
+Rahul won season 9 after not having been star baker since episode 3, and David won season 10 after not having won any star baker awards.
 
 
 
