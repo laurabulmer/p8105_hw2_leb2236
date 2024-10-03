@@ -226,7 +226,8 @@ winners_sbs
 The outcomes in the table largely made sense, however there were a few surprises.
 Rahul won season 9 after not having been star baker since episode 3, and David won season 10 after not having won any star baker awards.
 
-Now I am going to import the viewers dataset. 
+Now I am going to import the viewers dataset, clean and tidy it, and then print
+the first 10 observations.
 
 ```{r}
 viewers_df = 
@@ -241,7 +242,23 @@ viewers_df_longer =
     values_to = "viewership"
   ) %>% 
   relocate(series) %>% 
-  arrange(series, episode)
+  arrange(series, episode) %>% 
+  drop_na(viewership)
+
+head(viewers_df_longer, 10)
 ```
 
+Now I'm going to pull a few statistics from this dataset.
 
+```{r}
+series_1 = 
+  viewers_df_longer %>% 
+  filter(series == "series_1")
+
+series_5 = 
+  viewers_df_longer %>% 
+  filter(series == "series_5")
+```
+
+The mean viewership in series 1 is `r mean(pull(series_1, viewership), 2)`.
+The mean viewership in series 5 is `r mean(pull(series_5, viewership), 2)`.
