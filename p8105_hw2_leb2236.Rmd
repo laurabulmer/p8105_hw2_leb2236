@@ -11,6 +11,9 @@ library(tidyverse)
 
 ## Problem 1
 
+As the solutions for this problem were posted, the solution code was mostly used for 
+problem 1.
+
 First I am going to import and then read/clean the NYC Transit data.
 
 ```{r}
@@ -28,6 +31,7 @@ transit_data
 
 The next bit of code selects the station name and line, and uses distinct() command to 
 obtain all unique combinations.
+
 ```{r}
 transit_data |> 
   select(station_name, line) |> 
@@ -35,6 +39,7 @@ transit_data |>
 ```
 
 The next bit of code is similar but filters according to ADA compliance.
+
 ```{r}
 transit_data |> 
   filter(ada == TRUE) |> 
@@ -45,6 +50,7 @@ transit_data |>
 
 The next bit of code is used to determine the proportion of stations without 
 vending that allow entrance.
+
 ```{r}
 transit_data |> 
   filter(vending == "NO") |> 
@@ -53,6 +59,7 @@ transit_data |>
 ```
 
 Lastly, we write a code chunk to identify stations that serve the A train, and to assess how many of these are ADA compliant. We convert the data from wide to long format. Then we filter on A train and on ADA compliance, and use select() and distinct() to obstain dataframes with the required stations in rows.
+
 ```{r}
 transit_data |> 
   pivot_longer(
