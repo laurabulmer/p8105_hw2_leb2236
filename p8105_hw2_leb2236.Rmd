@@ -159,7 +159,6 @@ bakers_df =
   relocate(series) %>% 
   separate(baker_name, c('baker', 'baker_last_name'))
 
-
 bakes_df =
    read.csv("./data/bakes.csv") %>% 
   janitor :: clean_names()
@@ -180,11 +179,23 @@ bakes_results_df =
 Next I am working on joining our combined bakes/results dataset with the bakers
 dataset. Within this step I also am reodering the columns to first indicate the
 series and episode, then information on the baker, then the results and what they baked.
+I then took a look at the data and it appears that if result is N/A, then the 
+baker did not participate in that episode. Therefore I am removing rows which 
+indicate N/A for result.
 
 ```{r}
 gbbs = 
   left_join(bakes_results_df, bakers_df) %>% 
   relocate(series, episode, baker, baker_last_name, baker_age, hometown, baker_occupation, 
-           technical, result)
+           technical, result) %>% 
+  drop_na(result) %>% 
+  arrange(series, episode, technical)
 ```
+
+We'll come back to anti_join before submitting.
+```{r}
+results_bakes_unmatched = anti_join(results_df, bakes_df)
+```
+
+
 
