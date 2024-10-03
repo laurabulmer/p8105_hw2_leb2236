@@ -192,7 +192,7 @@ gbbs =
   arrange(series, episode, technical)
 ```
 
-We'll come back to anti_join before submitting.
+I'm testing for completeness and using the anti_join function.
 ```{r}
 results_bakes_unmatched = anti_join(results_df, bakes_df)
 ```
